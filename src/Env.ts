@@ -1,0 +1,1 @@
+export const START_URL = process.env.NODE_ENV === "production"? "" : "http://localhost:8000";

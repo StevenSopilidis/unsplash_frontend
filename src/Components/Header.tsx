@@ -1,14 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import React from "react";
 import { css } from "@emotion/react";
-import { Black1, PrimaryGreen, White1 } from "../Styles/Colors";
+import { Black1 } from "../Styles/Colors";
+import { GreenFormButton } from "../Styles/Elements";
 
 const SearchFormSubmit = (e : React.FormEvent) => 
 {
     e.preventDefault();
 };
 
-export const Header = () => {
+type Props =
+{
+    seeAddPhotoContainer: boolean, 
+    setSeeAddPhotoContainer: React.Dispatch<React.SetStateAction<boolean>>
+};
+
+export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer}: Props) => {
     const [searchValue, setSearchValue] = React.useState<string>("");
 
     return (
@@ -57,17 +64,9 @@ export const Header = () => {
                 />
             </form>
         </div>
-        <button css={css`
-            background-color: ${PrimaryGreen};
-            color: ${White1};
-            font-family: Noto Sans;
-            border: none;
-            width: 110px;
-            height: 40px;
-            box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-            margin-right: 90px;
-        `}>Add a photo</button>
+        <GreenFormButton 
+        onClick={e => setSeeAddPhotoContainer(!seeAddPhotoContainer)}
+        >Add a photo</GreenFormButton>
     </div>
     );
 };
