@@ -21,7 +21,7 @@ export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer}: Props) =
     return (
     <div css={css`
         width: 100%;
-        height: 65px;
+        height: 70px;
         position: fixed;
         top: 0;
         left: 0;
@@ -33,19 +33,21 @@ export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer}: Props) =
             display: flex;
             align-items: center;
         `}>
-            <div css={css`margin-left: 50px; margin-top: 10px;`}>
+            <div css={css`margin-left: 40px`}>
                 <h2 css={css`
                     color: ${Black1};
                     font-size: 25px;
                     font-family: Noto Sans;
                     font-weigth: 800;
                 `}>My Unsplash</h2>
+
                 <p css={css`
                     color: ${Black1};
                     font-weight: 500;
                     font-famly: Noto Sans;
                     font-size: 15px;
-                `}>Steven Sopilids</p>
+                `}>@Steven Sopilids</p>
+            
             </div>
             <form onSubmit={SearchFormSubmit}>
                 <input 
