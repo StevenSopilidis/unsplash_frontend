@@ -4,6 +4,7 @@ import { css } from "@emotion/react";
 import { ErrorResponse } from "../Responses/ErrorResponse";
 import { LoginBeforeUpload } from "./LoginBeforeUpload";
 import { UploadAfterAuth } from "./UploadAfterAuth";
+import { SignUp } from "./SignUp";
 
 export const AddPhoto = () => 
 {
@@ -15,11 +16,13 @@ export const AddPhoto = () =>
     //when the user passes succesffully credentials
     //so the width to actuall upload the photo
     const [seeUploader, setSeeUploader] = React.useState<boolean>(false);
+    //wether the user see the SignUp widget
+    const [seeSignUp, setSeeSignUp] = React.useState<boolean>(false);
 
     return (
         <div css={css`
             width: 620px;
-            height: 360px;
+            height: ${seeSignUp? "520px": "360px"};
             border-radius: 12px;
             border: 1px solid black;
             position: fixed;
@@ -30,8 +33,9 @@ export const AddPhoto = () =>
             display: flex;
             flex-direction: column;
         `}>
-            {!seeUploader && <LoginBeforeUpload seeUploader={seeUploader} setSeeUploader={setSeeUploader}/> }            
+            {!seeUploader && !seeSignUp && <LoginBeforeUpload setSeeSignUp={setSeeSignUp} setSeeUploader={setSeeUploader}/> }            
             {seeUploader && <UploadAfterAuth /> }            
+            {seeSignUp && <SignUp setSeeSignUp={setSeeSignUp}/> }
         </div>
     )
 };
