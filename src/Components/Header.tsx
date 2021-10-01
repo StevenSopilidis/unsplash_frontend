@@ -28,6 +28,7 @@ export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer}: Props) =
         display: flex;
         align-items: center;
         justify-content: space-between;
+        z-index: 1000;
     `}>
         <div css={css`
             display: flex;
