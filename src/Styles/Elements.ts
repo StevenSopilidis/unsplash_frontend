@@ -27,5 +27,18 @@ export const GreenFormButton = styled.button`
     box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
     margin-right: 90px;
-cursor: pointer;
+    cursor: pointer;
 `;
+
+export const BlackFormButton = styled.button`
+    background-color: ${Black2};
+    color: ${White1};
+    font-family: Noto Sans;
+    border: none;
+    width: 110px;
+    height: 40px;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin-right: 90px;
+    cursor: pointer;
+`

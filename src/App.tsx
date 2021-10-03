@@ -54,7 +54,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header seeAddPhotoContainer={seeAddPhotoContainer} setSeeAddPhotoContainer={setSeeAddPhotoContainer}/>
+      <Header fetchOriginalImages={fetchImages} setImages={setImages} seeAddPhotoContainer={seeAddPhotoContainer} setSeeAddPhotoContainer={setSeeAddPhotoContainer}/>
       {/* div where the main content will be placed */}
       <div css={css`
         margin-top: 100px;

@@ -2,21 +2,38 @@
 import React from "react";
 import { css } from "@emotion/react";
 import { Black1 } from "../Styles/Colors";
-import { GreenFormButton } from "../Styles/Elements";
-
-const SearchFormSubmit = (e : React.FormEvent) => 
-{
-    e.preventDefault();
-};
+import { BlackFormButton, GreenFormButton } from "../Styles/Elements";
+import { Photo } from "../Types/Photo";
+import axios from "axios";
+import { START_URL } from "../Env";
 
 type Props =
 {
     seeAddPhotoContainer: boolean, 
-    setSeeAddPhotoContainer: React.Dispatch<React.SetStateAction<boolean>>
+    setSeeAddPhotoContainer: React.Dispatch<React.SetStateAction<boolean>>,
+    setImages: React.Dispatch<React.SetStateAction<Photo[]>>,
+    fetchOriginalImages: () => Promise<void>
 };
 
-export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer}: Props) => {
+export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer, setImages, fetchOriginalImages}: Props) => {
     const [searchValue, setSearchValue] = React.useState<string>("");
+
+    const SearchFormSubmit = async (e : React.FormEvent) => 
+    {
+        e.preventDefault();
+        try {
+            if(searchValue.length > 0)
+            {
+                const res = await axios.get(START_URL + `/api/images/user/${searchValue}`)   
+                setImages(res.data);
+            }else {
+                await fetchOriginalImages();
+            }
+            
+        } catch (error) {
+            
+        }
+    };
 
     return (
     <div css={css`
@@ -67,9 +84,14 @@ export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer}: Props) =
                 />
             </form>
         </div>
-        <GreenFormButton 
-        onClick={e => setSeeAddPhotoContainer(!seeAddPhotoContainer)}
-        >Add a photo</GreenFormButton>
+
+        <div>
+            <GreenFormButton 
+            onClick={e => setSeeAddPhotoContainer(!seeAddPhotoContainer)}
+            >Add a photo</GreenFormButton>
+
+            <BlackFormButton>View Profile</BlackFormButton>
+        </div>
     </div>
     );
 };
