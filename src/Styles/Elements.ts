@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Black2, PrimaryGreen, White1 } from "./Colors";
+import { Black2, PrimaryGreen, Red1, White1 } from "./Colors";
 
 export const FormLabel = styled.label`
     font-size: 16px;
@@ -41,4 +41,21 @@ export const BlackFormButton = styled.button`
     border-radius: 12px;
     margin-right: 90px;
     cursor: pointer;
+`
+
+export const RedFormButton = styled.button`
+    background-color: ${Red1};
+    color: ${White1};
+    font-family: Noto Sans;
+    border: none;
+    width: 110px;
+    height: 40px;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin-right: 90px;
+    cursor: pointer;
+    :hover {
+        background-color: ${White1};
+        color: ${Red1};
+    }
 `

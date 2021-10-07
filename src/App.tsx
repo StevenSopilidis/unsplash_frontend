@@ -8,9 +8,14 @@ import axios from 'axios';
 import { START_URL } from './Env';
 import { White1 } from './Styles/Colors';
 import { isLabeledStatement } from 'typescript';
+import { MyProfile } from './Components/MyProfile';
+import { User } from './Types/User';
+import { RedFormButton } from './Styles/Elements';
 
 function App() {
+  const [currentUser, setCurrentUser] = React.useState<User | null>(null);
   const [seeAddPhotoContainer, setSeeAddPhotoContainer] = React.useState<boolean>(false);
+  const [seeMyProfile, setSeeSeeMyProfile] = React.useState<boolean>(false);
   //for the pagination (will use scroll pagination (e.g instagram))
   const [currentPage, setCurrentPage] = React.useState<number>(1);
   const pageSize = 9;
@@ -23,12 +28,13 @@ function App() {
   //so there wont be too many requests
   let timer : NodeJS.Timeout | null = null;
 
+
   const fetchImages = async () : Promise<void> => {
     const res = await axios.get(START_URL + `/api/images?currentPage=${currentPage}&pageSize=${pageSize}`);
     const data: Photo[] = [...res.data];
     images.forEach(image => data.push(image));
     setImages(data);
-  }
+  };
 
   React.useEffect(() => {
     fetchImages();
@@ -54,7 +60,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header fetchOriginalImages={fetchImages} setImages={setImages} seeAddPhotoContainer={seeAddPhotoContainer} setSeeAddPhotoContainer={setSeeAddPhotoContainer}/>
+      <Header currentUser={currentUser} setCurrentUser={setCurrentUser} seeMyProfile={seeMyProfile} setSeeMyProfile={setSeeSeeMyProfile} fetchOriginalImages={fetchImages} setImages={setImages} seeAddPhotoContainer={seeAddPhotoContainer} setSeeAddPhotoContainer={setSeeAddPhotoContainer}/>
       {/* div where the main content will be placed */}
       <div css={css`
         margin-top: 100px;
@@ -62,6 +68,10 @@ function App() {
       `}>
         {seeAddPhotoContainer &&
         <AddPhoto />
+        }
+
+        {seeMyProfile && 
+        <MyProfile currentUser={currentUser!}/>
         }
 
         <div css={css`
@@ -106,6 +116,9 @@ function App() {
                   p {
                     display: block;
                   }
+                  button {
+                    display: block;
+                  }
                 }
                 display: flex;
                 flex-direction: column;
@@ -127,6 +140,22 @@ function App() {
                   `}>
                     Users Label: {image.Label && image.Label.length > 20? image.Label.substring(0,20) + "...." : image.Label}         
                   </p>
+
+                  {/* if image is uploaededed by the currently logged in user 
+                  display a delete button */}
+                  {image.User.Username === currentUser?.Username &&
+                  <RedFormButton 
+                    css={css`display: none`}
+                    onClick={async () => {
+                      try {
+                        const res = await axios.delete(START_URL + `/api/images/${image._id}`, {withCredentials: true});
+                        window.location.reload();
+                      } catch (error) {
+                        
+                      }
+                    }}
+                  >Delete
+                  </RedFormButton>}
                 </div>
 
               </div>

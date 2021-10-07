@@ -32,6 +32,8 @@ export const AddPhoto = () =>
             padding-left: 32px;
             display: flex;
             flex-direction: column;
+            z-index: 10000;
+            background-color: #FFFFFF;
         `}>
             {!seeUploader && !seeSignUp && <LoginBeforeUpload setSeeSignUp={setSeeSignUp} setSeeUploader={setSeeUploader}/> }            
             {seeUploader && <UploadAfterAuth /> }            

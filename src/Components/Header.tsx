@@ -6,16 +6,22 @@ import { BlackFormButton, GreenFormButton } from "../Styles/Elements";
 import { Photo } from "../Types/Photo";
 import axios from "axios";
 import { START_URL } from "../Env";
+import { User } from "../Types/User";
 
 type Props =
 {
     seeAddPhotoContainer: boolean, 
     setSeeAddPhotoContainer: React.Dispatch<React.SetStateAction<boolean>>,
+    currentUser: User | null,
+    setCurrentUser: React.Dispatch<React.SetStateAction<User | null>>,
+    seeMyProfile: boolean, 
+    setSeeMyProfile: React.Dispatch<React.SetStateAction<boolean>>,
     setImages: React.Dispatch<React.SetStateAction<Photo[]>>,
     fetchOriginalImages: () => Promise<void>
 };
 
-export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer, setImages, fetchOriginalImages}: Props) => {
+export const Header = 
+({seeAddPhotoContainer,setCurrentUser,currentUser, setSeeAddPhotoContainer, setImages, fetchOriginalImages, seeMyProfile, setSeeMyProfile}: Props) => {
     const [searchValue, setSearchValue] = React.useState<string>("");
 
     const SearchFormSubmit = async (e : React.FormEvent) => 
@@ -34,6 +40,26 @@ export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer, setImages
             
         }
     };
+
+    //function for getting the current user
+    //or returns null if there is no valid auth cookie
+    const getUser = async (): Promise<User | null> => {
+        try {
+            const res = await axios.get(START_URL + "/api/auth/currentuser", {
+                 withCredentials: true
+            });
+            const user: User = res.data;
+            setCurrentUser(user);
+            return user
+        } catch (error) {
+            return null;
+        }
+    }
+    
+    React.useEffect(() => {
+        getUser();
+        console.log(currentUser);
+    }, []);
 
     return (
     <div css={css`
@@ -87,10 +113,24 @@ export const Header = ({seeAddPhotoContainer, setSeeAddPhotoContainer, setImages
 
         <div>
             <GreenFormButton 
-            onClick={e => setSeeAddPhotoContainer(!seeAddPhotoContainer)}
+            onClick={e => {
+                setSeeAddPhotoContainer(!seeAddPhotoContainer)
+                setSeeMyProfile(false);
+            }}
             >Add a photo</GreenFormButton>
-
-            <BlackFormButton>View Profile</BlackFormButton>
+            
+            {currentUser !== null &&
+            <BlackFormButton onClick={e => {
+                setSeeMyProfile(!seeMyProfile);
+                setSeeAddPhotoContainer(false);
+            }}>View Profile</BlackFormButton>
+            }
+            
+            {currentUser === null &&
+            <BlackFormButton onClick={e => {
+                setSeeAddPhotoContainer(true);
+            }}>Sign In</BlackFormButton>
+            }
         </div>
     </div>
     );
