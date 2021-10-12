@@ -2,6 +2,8 @@
 import React from "react"
 import { css } from "@emotion/react"
 import { User } from "../Types/User";
+import axios from "axios";
+import { START_URL } from "../Env";
 
 type Props = 
 {
@@ -10,10 +12,17 @@ type Props =
 
 export const MyProfile = ({ currentUser } : Props) => 
 {
-
-    React.useEffect(() => {
-        console.log(currentUser);        
-    }, []);
+    const handleChangeSubscription = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+        try {
+            const { data } = await axios.post(`${START_URL}/api/create-checkout-session`, {
+                subscriptionTier: e.target.value  
+            }, { withCredentials: true});
+            const checkout_url = data.checkout_url;
+            window.location.replace(checkout_url);
+        } catch (error) {
+            
+        }
+    }
 
     return (
         <div css={css`
@@ -36,6 +45,19 @@ export const MyProfile = ({ currentUser } : Props) =>
             <h4>Country: {currentUser.Country}</h4>
             <h4>City: {currentUser.City}</h4>
             <h4>Tier: {currentUser.UserTier} </h4>
+            <div css={css`
+                diplay: flex;
+                align_items: center;
+                flex-direction: row;
+            `}>
+                <h4>Change tier to: </h4>
+                <select onChange={handleChangeSubscription} name="tiers">
+                    <option value="DefaultTier">DefaultTier</option>
+                    <option value="LowTier">LowTier</option>
+                    <option value="MediumTier">MediumTier</option>
+                    <option value="HighTier">HighTier</option>
+                </select>
+            </div>
         </div>
     )
 }
